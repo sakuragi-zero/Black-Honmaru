@@ -9,8 +9,6 @@
         "args": {
             // タイムゾーン設定（ホストのTZ環境変数を使用、デフォルトはAmerica/Los_Angeles）
             "TZ": "${localEnv:TZ:America/Los_Angeles}",
-            // Claude Codeのバージョン
-            "CLAUDE_CODE_VERSION": "latest",
             // Git Deltaツールのバージョン（diffをより見やすく表示するツール）
             "GIT_DELTA_VERSION": "0.18.2",
             // Dockerコンテナ内でZshを使用するための設定バージョン
@@ -71,8 +69,6 @@
     ],
     // コンテナ内で設定される環境変数
     "containerEnv": {
-        // Node.jsのメモリ上限を4GBに設定
-        "NODE_OPTIONS": "--max-old-space-size=4096",
         // Claude設定ディレクトリのパス
         "CLAUDE_CONFIG_DIR": "/home/node/.claude",
         // Powerlevel9kテーマのgitステータス表示を無効化（パフォーマンス向上）

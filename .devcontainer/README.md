@@ -39,7 +39,6 @@ VS Codeのリモートエクスプローラーに表示される名前です。
 - **dockerfile**: 使用するDockerfileを指定
 - **args**: Dockerfileに渡すビルド時引数
   - `TZ`: タイムゾーン（日本の場合は`Asia/Tokyo`など）
-  - `CLAUDE_CODE_VERSION`: Claude Codeのバージョン
   - `GIT_DELTA_VERSION`: Git差分表示ツールのバージョン
   - `ZSH_IN_DOCKER_VERSION`: Zshシェルの設定バージョン
 
@@ -97,12 +96,10 @@ VS Codeのリモートエクスプローラーに表示される名前です。
 
 ```json
 "containerEnv": {
-    "NODE_OPTIONS": "--max-old-space-size=4096",
     "CLAUDE_CONFIG_DIR": "/home/node/.claude",
     "POWERLEVEL9K_DISABLE_GITSTATUS": "true"
 }
 ```
-- **NODE_OPTIONS**: Node.jsに4GBのメモリを割り当て
 - **CLAUDE_CONFIG_DIR**: Claude設定ディレクトリのパス
 - **POWERLEVEL9K_DISABLE_GITSTATUS**: ターミナルのGit表示を無効化（高速化）
 
@@ -151,7 +148,7 @@ Node.js 20が含まれる公式イメージをベースとして使用します�
 #### その他のツール
 - **jq**: JSON処理ツール
 - **git-delta**: Git差分の見やすい表示
-- **Claude Code CLI**: AnthropicのAI支援コーディングツール
+- **Claude Code**: AnthropicのAI支援コーディングツール（ネイティブインストーラーでインストール）
 
 ### ユーザー設定
 
@@ -304,8 +301,3 @@ graph TD
 ]
 ```
 
-### メモリ上限を変更したい
-`NODE_OPTIONS`の値を変更してください（単位はMB）：
-```json
-"NODE_OPTIONS": "--max-old-space-size=8192"  // 8GBに変更
-```

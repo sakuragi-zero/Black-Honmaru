@@ -6,9 +6,6 @@ ARG TZ
 # 環境変数としてタイムゾーンを設定
 ENV TZ="$TZ"
 
-# ビルド時引数：Claude Codeのバージョン（デフォルトは最新版）
-ARG CLAUDE_CODE_VERSION=latest
-
 # 基本的な開発ツールとネットワーク管理ツールをインストール
 RUN apt-get update && apt-get install -y --no-install-recommends \
   less \          # ページャー（ファイルの閲覧）
@@ -31,9 +28,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   vim \           # テキストエディタ（高機能）
   && apt-get clean && rm -rf /var/lib/apt/lists/*  # キャッシュ削除（イメージサイズ削減）
 
-# npmのグローバルパッケージ用ディレクトリを作成し、nodeユーザーに権限を付与
-RUN mkdir -p /usr/local/share/npm-global && \
-  chown -R node:node /usr/local/share
+# /usr/local/shareディレクトリの権限をnodeユーザーに付与
+RUN chown -R node:node /usr/local/share
 
 # デフォルトユーザー名を設定
 ARG USERNAME=node
@@ -65,11 +61,6 @@ RUN ARCH=$(dpkg --print-architecture) && \
 # 以降の処理をnodeユーザーで実行（root権限から切り替え）
 USER node
 
-# npmグローバルパッケージのインストール先を設定
-ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
-# パスにnpmグローバルパッケージのbinディレクトリを追加
-ENV PATH=$PATH:/usr/local/share/npm-global/bin
-
 # デフォルトシェルをzshに設定
 ENV SHELL=/bin/zsh
 
@@ -88,8 +79,8 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
   -a "export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \  # 履歴設定
   -x  # powerlevel10kテーマを無効化
 
-# Claude Code CLIをグローバルインストール
-RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+# Claude Codeをネイティブインストーラーでインストール（公式推奨方法）
+RUN curl -fsSL https://claude.ai/install.sh | bash
 
 
 # ファイアウォール初期化スクリプトをコンテナ内にコピー
