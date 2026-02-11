@@ -1,33 +1,53 @@
 {
+    // コンテナの表示名（VS Codeのリモートエクスプローラーに表示される名前）
     "name": "Claude Code Sandbox",
+    // コンテナのビルド設定
     "build": {
+        // 使用するDockerfileの指定
         "dockerfile": "Dockerfile",
+        // Dockerfileに渡すビルド引数
         "args": {
+            // タイムゾーン設定（ホストのTZ環境変数を使用、デフォルトはAmerica/Los_Angeles）
             "TZ": "${localEnv:TZ:America/Los_Angeles}",
+            // Claude Codeのバージョン
             "CLAUDE_CODE_VERSION": "latest",
+            // Git Deltaツールのバージョン（diffをより見やすく表示するツール）
             "GIT_DELTA_VERSION": "0.18.2",
+            // Dockerコンテナ内でZshを使用するための設定バージョン
             "ZSH_IN_DOCKER_VERSION": "1.2.0"
         }
     },
+    // Dockerコンテナ実行時の追加引数
     "runArgs": [
+        // ネットワーク管理機能を追加（ファイアウォール設定などに必要）
         "--cap-add=NET_ADMIN",
+        // RAWソケット通信を許可（pingコマンドなどに必要）
         "--cap-add=NET_RAW"
     ],
+    // VS Codeのカスタマイズ設定
     "customizations": {
         "vscode": {
+            // コンテナ起動時に自動インストールされる拡張機能
             "extensions": [
-                "anthropic.claude-code",
-                "dbaeumer.vscode-eslint",
-                "esbenp.prettier-vscode",
-                "eamodio.gitlens"
+                "anthropic.claude-code", // Claude Code拡張機能
+                "dbaeumer.vscode-eslint", // ESLint（JavaScriptのコード品質チェック）
+                "esbenp.prettier-vscode", // Prettier（コードフォーマッター）
+                "eamodio.gitlens" // GitLens（Git機能拡張）
             ],
+            // VS Codeエディタの設定
             "settings": {
+                // ファイル保存時に自動フォーマット
                 "editor.formatOnSave": true,
+                // デフォルトのフォーマッターとしてPrettierを使用
                 "editor.defaultFormatter": "esbenp.prettier-vscode",
+                // 保存時のコードアクション
                 "editor.codeActionsOnSave": {
+                    // ESLintの自動修正を明示的に実行
                     "source.fixAll.eslint": "explicit"
                 },
+                // Linuxコンテナ内のデフォルトターミナルプロファイル
                 "terminal.integrated.defaultProfile.linux": "zsh",
+                // 利用可能なターミナルプロファイルの定義
                 "terminal.integrated.profiles.linux": {
                     "bash": {
                         "path": "bash",
@@ -40,18 +60,30 @@
             }
         }
     },
+    // コンテナ内で使用するユーザー名（nodeユーザーで実行）
     "remoteUser": "node",
+    // コンテナにマウントするボリューム
     "mounts": [
+        // コマンド履歴を永続化するボリューム
         "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
+        // Claude設定を永続化するボリューム
         "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume"
     ],
+    // コンテナ内で設定される環境変数
     "containerEnv": {
+        // Node.jsのメモリ上限を4GBに設定
         "NODE_OPTIONS": "--max-old-space-size=4096",
+        // Claude設定ディレクトリのパス
         "CLAUDE_CONFIG_DIR": "/home/node/.claude",
+        // Powerlevel9kテーマのgitステータス表示を無効化（パフォーマンス向上）
         "POWERLEVEL9K_DISABLE_GITSTATUS": "true"
     },
+    // ワークスペースフォルダのマウント設定（ホストのプロジェクトフォルダをコンテナ内にマウント）
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+    // コンテナ内のワークスペースディレクトリパス
     "workspaceFolder": "/workspace",
+    // コンテナ起動後に実行するコマンド（ファイアウォール初期化スクリプト）
     "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+    // コンテナ準備完了の待機対象（postStartCommandの完了を待つ）
     "waitFor": "postStartCommand"
 }
