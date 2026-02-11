@@ -97,16 +97,24 @@ done < <(echo "$gh_ranges" | jq -r '(.web + .api + .git)[]' | aggregate -q)
 # ========================================
 # 7. その他の許可ドメインを解決して追加
 # ========================================
-# 許可するドメインのリスト
+# 許可するドメインのリスト：
+# - registry.npmjs.org: npmパッケージレジストリ
+# - api.anthropic.com: Anthropic API
+# - sentry.io: エラートラッキングサービス
+# - statsig.anthropic.com: Anthropic統計サービス
+# - statsig.com: 統計サービス
+# - marketplace.visualstudio.com: VS Code拡張機能マーケットプレイス
+# - vscode.blob.core.windows.net: VS Codeリソースストレージ
+# - update.code.visualstudio.com: VS Codeアップデートサーバー
 for domain in \
-    "registry.npmjs.org" \              # npmパッケージレジストリ
-    "api.anthropic.com" \                # Anthropic API
-    "sentry.io" \                        # エラートラッキングサービス
-    "statsig.anthropic.com" \            # Anthropic統計サービス
-    "statsig.com" \                      # 統計サービス
-    "marketplace.visualstudio.com" \     # VS Code拡張機能マーケットプレイス
-    "vscode.blob.core.windows.net" \     # VS Codeリソースストレージ
-    "update.code.visualstudio.com"; do   # VS Codeアップデートサーバー
+    "registry.npmjs.org" \
+    "api.anthropic.com" \
+    "sentry.io" \
+    "statsig.anthropic.com" \
+    "statsig.com" \
+    "marketplace.visualstudio.com" \
+    "vscode.blob.core.windows.net" \
+    "update.code.visualstudio.com"; do
     echo "Resolving $domain..."
     # digコマンドでドメインのAレコード（IPv4アドレス）を取得
     ips=$(dig +noall +answer A "$domain" | awk '$4 == "A" {print $5}')
