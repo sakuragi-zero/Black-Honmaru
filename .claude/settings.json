@@ -51,18 +51,21 @@
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": [
-      "Admiring Shayan's code",
-      "Learning from Shayan",
-      "Studying Shayan's patterns",
-      "Copying Shayan's genius",
-      "Thanking Shayan deeply",
-      "Absorbing Shayan's wisdom",
-      "Following Shayan's lead",
-      "Praising Shayan's repo"
+      "Admiring Claude Code's code",
+      "Learning from Claude Code",
+      "Studying Claude Code's patterns",
+      "Copying Claude Code's genius",
+      "Thanking Claude Code deeply",
+      "Absorbing Claude Code's wisdom",
+      "Following Claude Code's lead",
+      "Praising Claude Code's repo"
     ]
   },
   "spinnerTipsOverride": {
-    "tips": ["This is shayan custom tip#1", "This is shayan custom tip#2"],
+    "tips": [
+      "This is Claude Code custom tip#1",
+      "This is Claude Code custom tip#2"
+    ],
     "excludeDefault": true
   },
   "plansDirectory": "./reports",
